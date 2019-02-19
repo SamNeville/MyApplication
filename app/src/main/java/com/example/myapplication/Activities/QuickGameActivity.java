@@ -8,7 +8,6 @@ import com.example.myapplication.Services.gameService;
 
 import java.util.*;
 
-
 public class QuickGameActivity extends AppCompatActivity {
 
     @Override
