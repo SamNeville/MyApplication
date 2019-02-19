@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.example.myapplication.R;
 import com.example.myapplication.Services.gameService;
-
 import java.util.*;
 
 public class QuickGameActivity extends AppCompatActivity {
