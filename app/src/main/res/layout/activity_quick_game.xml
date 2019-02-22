@@ -12,12 +12,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/gameGrid"
-    android:columnWidth="20dp"
+    android:columnWidth="40dp"
     android:numColumns="10"
-    android:verticalSpacing="5dp"
-    android:horizontalSpacing="5dp"
     android:stretchMode="columnWidth"
-    android:gravity="center"
     >
 
 </GridView>

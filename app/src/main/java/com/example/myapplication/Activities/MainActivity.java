@@ -24,14 +24,12 @@ public class MainActivity extends AppCompatActivity {
     public void initialize(){
         quickGameButton = findViewById(R.id.quickGameButton);
         createGameButton = findViewById(R.id.createGameButton);
-
         quickGameButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 openQuickGame();
             }
         });
-
         createGameButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
