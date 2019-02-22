@@ -1,7 +1,17 @@
 package com.example.myapplication.Activities;
 import java.lang.*;
+
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.content.Context;
+import android.view.ViewGroup;
+import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.view.Menu;
 
 import com.example.myapplication.R;
 import com.example.myapplication.Services.gameService;
@@ -30,9 +40,5 @@ public class QuickGameActivity extends AppCompatActivity {
                 if(gameArray[i][j] == null) gameArray[i][j] = s; // only place it, if its not occupied already
             }
         }
-        String newArr [][] = gameArray;
     }
-
-
-
 }

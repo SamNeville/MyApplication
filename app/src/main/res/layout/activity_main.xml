@@ -8,7 +8,7 @@
 
     <Button
         android:id="@+id/quickGameButton"
-        android:layout_width="wrap_content"
+        android:layout_width="107dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
@@ -16,13 +16,15 @@
         android:layout_marginStart="3dp"
         android:layout_marginLeft="3dp"
         android:layout_marginTop="5dp"
+        android:background="@drawable/rounded_btn"
         android:text="Quick Game"
+        android:textColor="#FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/createGameButton"
-        android:layout_width="wrap_content"
+        android:layout_width="118dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="3dp"
@@ -30,23 +32,25 @@
         android:layout_marginTop="6dp"
         android:layout_toEndOf="@+id/quickGameButton"
         android:layout_toRightOf="@+id/quickGameButton"
-        android:text="Create Game" />
+        android:background="@drawable/rounded_btn"
+        android:text="Create Game"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/importButton"
-        android:layout_width="wrap_content"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginStart="-1dp"
-        android:layout_marginLeft="-1dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
         android:layout_marginTop="6dp"
-        android:layout_marginEnd="98dp"
-        android:layout_marginRight="98dp"
+        android:layout_marginEnd="9dp"
+        android:layout_marginRight="6dp"
         android:layout_toEndOf="@+id/createGameButton"
         android:layout_toRightOf="@+id/createGameButton"
-        android:text="Import" />
+        android:background="@drawable/rounded_btn"
+        android:text="Import"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/settingsButton"
@@ -58,6 +62,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
-        android:text="Settings" />
+        android:background="@drawable/rounded_btn"
+        android:text="Settings"
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>

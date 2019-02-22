@@ -151,10 +151,6 @@ public class gameService {
     return response;
     }
 
-
-
-
-
     public static String[][] placeLetter(int coordinateX, int coordinateY, String word, int iteration, String[][] game){  // method used to just place an individual letter of an individual word into the Game
         String[][] response = new String[game.length][game.length];
         try
@@ -177,11 +173,7 @@ public class gameService {
         return response;
     }
 
-
-
-
     public static boolean checkCoordinates(String[][] game, Coordinates[] locations, String word, int length){
-
         for(int i = 0; i <= length-1; i++){
             String letter = Character.toString(word.charAt(i));
 
@@ -193,5 +185,4 @@ public class gameService {
         }
         return true;
     }
-
 }
