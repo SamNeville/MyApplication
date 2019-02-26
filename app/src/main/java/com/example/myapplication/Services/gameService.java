@@ -1,6 +1,7 @@
 package com.example.myapplication.Services;
 import android.provider.UserDictionary;
 
+import com.example.myapplication.DTOs.GameData;
 import com.example.myapplication.DTOs.Response;
 import com.example.myapplication.DTOs.Coordinates;
 import org.jetbrains.annotations.NotNull;
@@ -10,8 +11,9 @@ import java.util.Random;
 
 @SuppressWarnings("MagicConstant")
 public class gameService {
-    public static String[][] createGame(String[] words, int columns, int rows){  // create game method takes in a word list and an array size - creates a word search with the words passed in and returns it in the response.value
-        String[][] response = new String [columns][rows];
+    public static GameData createGame(String[] words, int columns, int rows){  // create game method takes in a word list and an array size - creates a word search with the words passed in and returns it in the response.value
+        GameData response = new GameData();
+        response.Words = new String[words.length];
         String [] gameWords = new String[words.length];
 
         try {
@@ -110,7 +112,7 @@ public class gameService {
                     for(int k = 0; k< length; k++){
                         game = placeLetter(locations[k].a, locations[k].b, words[i], k, game);
                     }
-                    response = game;
+                    response.Game = game;
                 }else{
                     //if checkCoordinates fails...
                     //try the word again with new coordinates
@@ -147,8 +149,15 @@ public class gameService {
 
         for(int p = 0; p<= gameWords.length-1; p++) {
             System.out.println(gameWords[p]);
+            if(gameWords[p] != null && gameWords[p] != "null") response.Words[p] = gameWords[p];
         }
-    return response;
+
+        for (int i = 0; i < response.Words.length ; i++) {
+            if(response.Words[i] == null){
+                response.Words[i] = " ";
+            }
+        }
+        return response;
     }
 
     public static String[][] placeLetter(int coordinateX, int coordinateY, String word, int iteration, String[][] game){  // method used to just place an individual letter of an individual word into the Game

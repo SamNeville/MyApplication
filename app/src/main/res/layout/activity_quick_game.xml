@@ -10,13 +10,27 @@
 
 <GridView
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="500dp"
     android:id="@+id/gameGrid"
-    android:columnWidth="40dp"
+    android:columnWidth="45dp"
     android:numColumns="10"
     android:stretchMode="columnWidth"
     >
 
 </GridView>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="5dp"/>
+
+    <ListView
+        android:id="@+id/wordsView"
+        android:layout_width="200dp"
+        android:layout_height="100dp" />
+    <ListView
+        android:id="@+id/hintView"
+        android:layout_width="200dp"
+        android:layout_height="100dp" />
 
 </LinearLayout>
