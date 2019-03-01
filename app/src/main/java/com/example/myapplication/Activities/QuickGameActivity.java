@@ -24,6 +24,14 @@ import java.util.*;
 
 public class QuickGameActivity extends AppCompatActivity {
 
+    int firstPosX = 0;
+    int firstPosY = 0;
+
+    int secondPosX = 0;
+    int secondPosY = 0;
+
+    int posCountTracker = 0;
+
     GridView grid;
     ListView list;
 
@@ -32,8 +40,8 @@ public class QuickGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_game);
 
-        int columns = 10;
-        int rows = 10;
+        final int columns = 10;
+        final int rows = 10;
         String[] words = new String[]{"Sam", "Nate", "Matt", "William", "Gary", "Fred", "Sofia", "penny", "owen", "cashdadd", "selena", "gus"};
 
         ListView listView; // for word list under word search
@@ -74,7 +82,25 @@ public class QuickGameActivity extends AppCompatActivity {
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
+                int x = position%rows;
+                int y = position/columns;
+
+                if(posCountTracker == 0){
+                    posCountTracker++;
+                    firstPosX = x;
+                    firstPosY = y;
+                }
+
+                if(posCountTracker ==1){
+                    posCountTracker--;
+                    secondPosX = x;
+                    secondPosY = y;
+                }
+
                 Toast.makeText(getApplicationContext(), ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "[ " + String.valueOf(firstPosX) + " ]" + " " +  "[ " + String.valueOf(firstPosY) + " ]"+ "[ "+String.valueOf(secondPosX)+" ]" + " " +  "[ " +String.valueOf(secondPosY)+" ]", Toast.LENGTH_SHORT).show();
+
+
             }
         });
 
