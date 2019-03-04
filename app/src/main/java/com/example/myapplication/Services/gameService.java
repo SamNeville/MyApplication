@@ -4,6 +4,8 @@ import android.provider.UserDictionary;
 import com.example.myapplication.DTOs.GameData;
 import com.example.myapplication.DTOs.Response;
 import com.example.myapplication.DTOs.Coordinates;
+import com.example.myapplication.DTOs.WordTracker;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.*;
@@ -35,9 +37,11 @@ public class gameService {
             int min = 0;
             int max = rows;
             int limiter = 0;
+            int finalCoodinateCounter = -1;
 
             int coordinateX = rand.nextInt((max - min) + 1) + min; // picks a random x
             int coordinateY = rand.nextInt((max - min) + 1) + min; // picks a random y
+            WordTracker[] finalCoordinates = new WordTracker[100];
 
             for (int i = 0; i < words.length; i++)
             {
@@ -108,11 +112,16 @@ public class gameService {
                 }
 
                 if(checkCoordinates(game, locations, words[i], length)){
+                    finalCoodinateCounter++;
                     gameWords[i] = words[i];
+
+                    WordTracker tracker = new WordTracker(words[i], locations[0].a, locations[0].b, locations[length-1].a, locations[length-1].b);
+                    finalCoordinates[finalCoodinateCounter] = tracker;
                     for(int k = 0; k< length; k++){
                         game = placeLetter(locations[k].a, locations[k].b, words[i], k, game);
                     }
                     response.Game = game;
+                    response.WordDetails = finalCoordinates;
                 }else{
                     //if checkCoordinates fails...
                     //try the word again with new coordinates

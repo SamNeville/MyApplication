@@ -1,6 +1,7 @@
 package com.example.myapplication.Activities;
 import java.lang.*;
 
+import android.graphics.Color;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 
 import com.example.myapplication.DTOs.GameData;
+import com.example.myapplication.DTOs.WordTracker;
 import com.example.myapplication.R;
 import com.example.myapplication.Services.gameService;
 
@@ -31,9 +33,15 @@ public class QuickGameActivity extends AppCompatActivity {
     int secondPosY = 0;
 
     int posCountTracker = 0;
+    int highlightTracker = 0;
+    int backPosition = -1;
 
     GridView grid;
     ListView list;
+
+    String selectedItem = null;
+    TextView GridViewItems, BackSelectedItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +58,14 @@ public class QuickGameActivity extends AppCompatActivity {
 
         GameData gameData = new GameData();        //for capturing the game
         String[][] gameArray = new String[rows][columns];   //for displaying the game
+        WordTracker[] WordData;
 
         gameData = gameService.createGame(words, rows, columns); // call to service to get a game
 
-        String[] wordlList = new String[gameData.Words.length]; // for displaying the words
+        String[] wordList = new String[gameData.Words.length]; // for displaying the words
         gameArray = gameData.Game; // grabs the game
-        wordlList = gameData.Words; // grabs the words
+        wordList = gameData.Words; // grabs the words
+        WordData = gameData.WordDetails; // grabs Words and their start and end coordinates
 
         String[] total = new String [rows*columns]; // used for gridview since it can only take single dimensional arrays
 
@@ -74,7 +84,6 @@ public class QuickGameActivity extends AppCompatActivity {
             }
         }
 
-
         grid = (GridView) findViewById(R.id.gameGrid);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, total);
 
@@ -82,20 +91,56 @@ public class QuickGameActivity extends AppCompatActivity {
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-                int x = position%rows;
-                int y = position/columns;
 
                 if(posCountTracker == 0){
+                    int x = position%rows;
+                    int y = position/columns;
                     posCountTracker++;
+                    highlightTracker = 1;
                     firstPosX = x;
                     firstPosY = y;
-                }
-
-                if(posCountTracker ==1){
+                    secondPosY = -1;
+                    secondPosX = -1;
+                    int positionA = position;
+                } else {
+                    int x = position%rows;
+                    int y = position/columns;
                     posCountTracker--;
+                    highlightTracker = 2;
                     secondPosX = x;
                     secondPosY = y;
+                    int positionB = position;
                 }
+
+
+                if(highlightTracker ==1) {
+                    selectedItem = parent.getItemAtPosition(position).toString();
+                    GridViewItems = (TextView) v;
+                    GridViewItems.setBackgroundColor(Color.parseColor("#814f00"));
+                    GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
+                    BackSelectedItem = (TextView) grid.getChildAt(backPosition);
+                    if (backPosition != -1) {
+                        BackSelectedItem.setSelected(false);
+                        BackSelectedItem.setBackgroundColor(Color.parseColor("#fbdcbb"));
+                        BackSelectedItem.setTextColor(Color.parseColor("#040404"));
+                    }
+                    backPosition = position;
+                }
+
+                if(highlightTracker ==2) {
+                    selectedItem = parent.getItemAtPosition(position).toString();
+                    GridViewItems = (TextView) v;
+                    GridViewItems.setBackgroundColor(Color.parseColor("#814f00"));
+                    GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
+                    BackSelectedItem = (TextView) grid.getChildAt(backPosition);
+                    if (backPosition != -1) {
+                        BackSelectedItem.setSelected(false);
+                        BackSelectedItem.setBackgroundColor(Color.parseColor("#fbdcbb"));
+                        BackSelectedItem.setTextColor(Color.parseColor("#040404"));
+                    }
+                    backPosition = position;
+                }
+
 
                 Toast.makeText(getApplicationContext(), ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "[ " + String.valueOf(firstPosX) + " ]" + " " +  "[ " + String.valueOf(firstPosY) + " ]"+ "[ "+String.valueOf(secondPosX)+" ]" + " " +  "[ " +String.valueOf(secondPosY)+" ]", Toast.LENGTH_SHORT).show();
@@ -106,7 +151,7 @@ public class QuickGameActivity extends AppCompatActivity {
 
 
         list = (ListView)findViewById(R.id.wordsView); // find the list view from xml
-        wordListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, wordlList); // should display these words under the grid now
+        wordListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, wordList); // should display these words under the grid now
 
         list.setAdapter(wordListAdapter);
 
