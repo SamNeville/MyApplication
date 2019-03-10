@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.myapplication.DTOs.Coordinates;
 import com.example.myapplication.DTOs.GameData;
 import com.example.myapplication.DTOs.WordTracker;
 import com.example.myapplication.R;
@@ -58,7 +59,7 @@ public class QuickGameActivity extends AppCompatActivity {
 
         GameData gameData = new GameData();        //for capturing the game
         String[][] gameArray = new String[rows][columns];   //for displaying the game
-        WordTracker[] WordData;
+        final WordTracker[] WordData;
 
         gameData = gameService.createGame(words, rows, columns); // call to service to get a game
 
@@ -112,6 +113,15 @@ public class QuickGameActivity extends AppCompatActivity {
                     int positionB = position;
                 }
 
+                for (int i = 0; i < 10; i++) {
+                    if ((WordData[i].beginX == firstPosX && WordData[i].beginY == firstPosY && WordData[i].endX == secondPosX && WordData[i].endY == secondPosY) || (WordData[i].beginX == firstPosY && WordData[i].beginY == firstPosX && WordData[i].endX == secondPosY && WordData[i].endY == secondPosX)){
+                        String selectedWord = WordData[i].word;
+
+                        int[] fillerLocations = new int[selectedWord.length()];
+                        fillerLocations = gridFiller(selectedWord, WordData, rows, columns);
+                        int s = -1;
+                    }
+                }
 
                 if(highlightTracker ==1) {
                     selectedItem = parent.getItemAtPosition(position).toString();
@@ -161,5 +171,55 @@ public class QuickGameActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public int[] gridFiller(String word, WordTracker[] data, int rows, int columns){
+        int [] response = new int[word.length()];
+        WordTracker selectedWord = new WordTracker("",0,0,0,0);
+        int length = -1;
+
+        for (int i = 0; i < data.length; i++) {
+            if(data[i] != null){
+                length++;
+            }
+        }
+
+        for (int i = 0; i < length ; i++) {
+            if(data[i].word != "" && word == data[i].word){
+                selectedWord = data[i];
+            }
+        }
+
+        int startY = selectedWord.beginX;
+        int startX = selectedWord.beginY;
+        int endY = selectedWord.endX;
+        int endX = selectedWord.endY;
+        int currentX = startX;
+        int currentY = startY;
+
+        response[0] = currentX + rows*currentY;
+
+        for (int i = 1; i < word.length() ; i++) {
+            if(startX > endX){
+                startX--;
+                currentX = startX;
+            }
+            if(startY > endY){
+                startY--;
+                currentY = startY;
+            }
+            if(startX < endX){
+                startX++;
+                currentX = startX;
+            }
+            if(startY < endY){
+                startY++;
+                currentY = startY;
+            }
+
+            response[i] = currentX + rows*currentY;
+        }
+            response[word.length()-1] = endX + rows*endY;
+        return response;
     }
 }
