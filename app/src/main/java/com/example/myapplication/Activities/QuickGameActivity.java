@@ -3,6 +3,7 @@ import java.lang.*;
 
 import android.graphics.Color;
 import android.media.Image;
+import android.support.v4.content.res.TypedArrayUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -63,9 +64,8 @@ public class QuickGameActivity extends AppCompatActivity {
 
         gameData = gameService.createGame(words, rows, columns); // call to service to get a game
 
-        String[] wordList = new String[gameData.Words.length]; // for displaying the words
         gameArray = gameData.Game; // grabs the game
-        wordList = gameData.Words; // grabs the words
+        final String[] wordList = gameData.Words; // grabs the words
         WordData = gameData.WordDetails; // grabs Words and their start and end coordinates
 
         String[] total = new String [rows*columns]; // used for gridview since it can only take single dimensional arrays
@@ -119,37 +119,50 @@ public class QuickGameActivity extends AppCompatActivity {
 
                         int[] fillerLocations = new int[selectedWord.length()];
                         fillerLocations = gridFiller(selectedWord, WordData, rows, columns);
-                        int s = -1;
+
+                      //  String[] tempList = new String[wordList.length-1];
+//
+                      //  for (int j = 0; j < wordList.length ; j++) {
+                      //      if(wordList[j] != selectedWord) {
+                      //          tempList[j] = wordList[j];
+                      //      }
+                      //      if(wordList[j] == selectedWord) j--;
+                      //  }
+
+                        for (int j = 0; j < fillerLocations.length; j++) {
+                            if(highlightTracker ==1) {
+                                selectedItem = parent.getItemAtPosition(fillerLocations[j]).toString();
+                                GridViewItems = (TextView) v;
+                                GridViewItems.setBackgroundColor(Color.parseColor("#93dada"));
+                                GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
+                                BackSelectedItem = (TextView) grid.getChildAt(backPosition);
+                                if (backPosition != -1) {
+                                    BackSelectedItem.setSelected(false);
+                                    BackSelectedItem.setBackgroundColor(Color.parseColor("#93dada"));
+                                    BackSelectedItem.setTextColor(Color.parseColor("#fdfcfa"));
+                                }
+                                backPosition = fillerLocations[j];
+                            }
+
+                            if(highlightTracker ==2) {
+                                selectedItem = parent.getItemAtPosition(fillerLocations[j]).toString();
+                                GridViewItems = (TextView) v;
+                                GridViewItems.setBackgroundColor(Color.parseColor("#93dada"));
+                                GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
+                                BackSelectedItem = (TextView) grid.getChildAt(backPosition);
+                                if (backPosition != -1) {
+                                    BackSelectedItem.setSelected(false);
+                                    BackSelectedItem.setBackgroundColor(Color.parseColor("#93dada"));
+                                    BackSelectedItem.setTextColor(Color.parseColor("#fdfcfa"));
+                                }
+                                backPosition = fillerLocations[j];
+                            }
+                        }
+
                     }
                 }
 
-                if(highlightTracker ==1) {
-                    selectedItem = parent.getItemAtPosition(position).toString();
-                    GridViewItems = (TextView) v;
-                    GridViewItems.setBackgroundColor(Color.parseColor("#814f00"));
-                    GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
-                    BackSelectedItem = (TextView) grid.getChildAt(backPosition);
-                    if (backPosition != -1) {
-                        BackSelectedItem.setSelected(false);
-                        BackSelectedItem.setBackgroundColor(Color.parseColor("#fbdcbb"));
-                        BackSelectedItem.setTextColor(Color.parseColor("#040404"));
-                    }
-                    backPosition = position;
-                }
 
-                if(highlightTracker ==2) {
-                    selectedItem = parent.getItemAtPosition(position).toString();
-                    GridViewItems = (TextView) v;
-                    GridViewItems.setBackgroundColor(Color.parseColor("#814f00"));
-                    GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
-                    BackSelectedItem = (TextView) grid.getChildAt(backPosition);
-                    if (backPosition != -1) {
-                        BackSelectedItem.setSelected(false);
-                        BackSelectedItem.setBackgroundColor(Color.parseColor("#fbdcbb"));
-                        BackSelectedItem.setTextColor(Color.parseColor("#040404"));
-                    }
-                    backPosition = position;
-                }
 
 
                 Toast.makeText(getApplicationContext(), ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
@@ -222,4 +235,5 @@ public class QuickGameActivity extends AppCompatActivity {
             response[word.length()-1] = endX + rows*endY;
         return response;
     }
+
 }
