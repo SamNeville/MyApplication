@@ -116,7 +116,7 @@ public class gameService {
                     gameWords[i] = words[i];
 
                     WordTracker tracker = new WordTracker(words[i], locations[0].a, locations[0].b, locations[length-1].a, locations[length-1].b);
-                    finalCoordinates[finalCoodinateCounter] = tracker;
+                    finalCoordinates[finalCoodinateCounter] = tracker; //  I THINK I MIGHT HAVE A BUG AROUND HERE - TRYING TO SELECT THE LAST WORD SEEMS TO NOT WORK BECAUSE COORDINATES ARE MESSED UP ON IT
                     for(int k = 0; k< length; k++){
                         game = placeLetter(locations[k].a, locations[k].b, words[i], k, game);
                     }

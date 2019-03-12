@@ -44,6 +44,7 @@ public class QuickGameActivity extends AppCompatActivity {
     String selectedItem = null;
     TextView GridViewItems, BackSelectedItem;
 
+    int wordRemoveCounter = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class QuickGameActivity extends AppCompatActivity {
         String[] words = new String[]{"Sam", "Nate", "Matt", "William", "Gary", "Fred", "Sofia", "penny", "owen", "cashdadd", "selena", "gus"};
 
         ListView listView; // for word list under word search
-        ArrayAdapter wordListAdapter;  // create out adapter to front end
+        final ArrayAdapter wordListAdapter;  // create out adapter to front end
 
 
         GameData gameData = new GameData();        //for capturing the game
@@ -85,6 +86,19 @@ public class QuickGameActivity extends AppCompatActivity {
             }
         }
 
+        list = (ListView)findViewById(R.id.wordsView); // find the list view from xml
+        wordListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, wordList); // should display these words under the grid now
+
+        list.setAdapter(wordListAdapter);
+
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView parent, View v, int position, long id) {
+                Toast.makeText(getApplicationContext(), ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //--------------------------------------------
+        //--------------------------------------------
         grid = (GridView) findViewById(R.id.gameGrid);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, total);
 
@@ -113,6 +127,7 @@ public class QuickGameActivity extends AppCompatActivity {
                     int positionB = position;
                 }
 
+
                 for (int i = 0; i < 10; i++) {
                     if ((WordData[i].beginX == firstPosX && WordData[i].beginY == firstPosY && WordData[i].endX == secondPosX && WordData[i].endY == secondPosY) || (WordData[i].beginX == firstPosY && WordData[i].beginY == firstPosX && WordData[i].endX == secondPosY && WordData[i].endY == secondPosX)){
                         String selectedWord = WordData[i].word;
@@ -120,14 +135,23 @@ public class QuickGameActivity extends AppCompatActivity {
                         int[] fillerLocations = new int[selectedWord.length()];
                         fillerLocations = gridFiller(selectedWord, WordData, rows, columns);
 
-                      //  String[] tempList = new String[wordList.length-1];
-//
-                      //  for (int j = 0; j < wordList.length ; j++) {
-                      //      if(wordList[j] != selectedWord) {
-                      //          tempList[j] = wordList[j];
-                      //      }
-                      //      if(wordList[j] == selectedWord) j--;
-                      //  }
+                        int counter = 0;
+                        for (int j = 0; j < wordList.length ; j++) {
+                            if(wordList[j] != selectedWord) {
+                                wordList[counter] = wordList[j];
+                            } else counter--;
+                            counter++;
+                        }
+
+                        int temp = (wordList.length - wordRemoveCounter);
+                        for (int j = 0; j < wordList.length ; j++) {
+                            if(j > temp){
+                                wordList[j] = "";
+                            }
+                        }
+                        wordRemoveCounter++;
+
+                        wordListAdapter.notifyDataSetChanged();
 
                         for (int j = 0; j < fillerLocations.length; j++) {
                             if(highlightTracker ==1) {
@@ -169,18 +193,6 @@ public class QuickGameActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "[ " + String.valueOf(firstPosX) + " ]" + " " +  "[ " + String.valueOf(firstPosY) + " ]"+ "[ "+String.valueOf(secondPosX)+" ]" + " " +  "[ " +String.valueOf(secondPosY)+" ]", Toast.LENGTH_SHORT).show();
 
 
-            }
-        });
-
-
-        list = (ListView)findViewById(R.id.wordsView); // find the list view from xml
-        wordListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, wordList); // should display these words under the grid now
-
-        list.setAdapter(wordListAdapter);
-
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView parent, View v, int position, long id) {
-                Toast.makeText(getApplicationContext(), ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -235,5 +247,6 @@ public class QuickGameActivity extends AppCompatActivity {
             response[word.length()-1] = endX + rows*endY;
         return response;
     }
+
 
 }
