@@ -1,6 +1,7 @@
 package com.example.myapplication.Activities;
 import java.lang.*;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
 import android.support.v4.content.res.TypedArrayUtils;
@@ -51,9 +52,16 @@ public class QuickGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_game);
 
+        Intent intent = getIntent();
+        Bundle b = intent.getExtras();
+        String[] words = new String[]{"wolf", "cougar", "snake", "lion", "tiger", "bear", "turtle", "giraffe", "hippo", "bingo"};
+
+        if(b != null){
+            words = b.getStringArray("array");
+        }
+
         final int columns = 10;
         final int rows = 10;
-        String[] words = new String[]{"wolf", "cougar", "snake", "lion", "tiger", "bear", "turtle", "giraffe", "hippo", "bingo"};
 
         ListView listView; // for word list under word search
         final ArrayAdapter wordListAdapter;  // create out adapter to front end
@@ -64,7 +72,6 @@ public class QuickGameActivity extends AppCompatActivity {
         final WordTracker[] WordData;
 
         gameData = gameService.createGame(words, rows, columns); // call to service to get a game
-
         gameArray = gameData.Game; // grabs the game
         final String[] wordList = gameData.Words; // grabs the words
         WordData = gameData.WordDetails; // grabs Words and their start and end coordinates
@@ -88,9 +95,7 @@ public class QuickGameActivity extends AppCompatActivity {
 
         list = (ListView)findViewById(R.id.wordsView); // find the list view from xml
         wordListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, wordList); // should display these words under the grid now
-
         list.setAdapter(wordListAdapter);
-
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
                 Toast.makeText(getApplicationContext(), ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
@@ -101,9 +106,7 @@ public class QuickGameActivity extends AppCompatActivity {
         //--------------------------------------------
         grid = (GridView) findViewById(R.id.gameGrid);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, total);
-
         grid.setAdapter(adapter);
-
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
 

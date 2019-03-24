@@ -115,9 +115,19 @@ public class gameService {
                     }
                 }
 
-                if(checkCoordinates(game, locations, words[i], length)){
+                if(checkCoordinates(game, locations, words[i], length) && locations != null){
                     finalCoodinateCounter++;
                     gameWords[i] = words[i];
+
+                    if(locations[0] == null){
+                        int test = 0;
+                    }
+
+
+                    if(locations[length-1] == null){
+                        int test = 0;
+                    }
+
 
                     WordTracker tracker = new WordTracker(words[i], locations[0].a, locations[0].b, locations[length-1].a, locations[length-1].b);
                     finalCoordinates[finalCoodinateCounter] = tracker; //  I THINK I MIGHT HAVE A BUG AROUND HERE - TRYING TO SELECT THE LAST WORD SEEMS TO NOT WORK BECAUSE COORDINATES ARE MESSED UP ON IT
