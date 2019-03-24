@@ -53,7 +53,7 @@ public class QuickGameActivity extends AppCompatActivity {
 
         final int columns = 10;
         final int rows = 10;
-        String[] words = new String[]{"Sam", "Nate", "Matt", "William", "Gary", "Fred", "Sofia", "penny", "owen", "cashdadd", "selena", "gus"};
+        String[] words = new String[]{"wolf", "cougar", "snake", "lion", "tiger", "bear", "turtle", "giraffe", "hippo", "bingo"};
 
         ListView listView; // for word list under word search
         final ArrayAdapter wordListAdapter;  // create out adapter to front end

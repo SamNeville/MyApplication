@@ -49,6 +49,10 @@ public class gameService {
                     limiter = 0;
                     i++;
                 }
+
+                if(i == 9){
+                    int test = 0;
+                }
                 Coordinates[] locations = new Coordinates[100];
                 limiter++;
                 for(int j = 0; j < words[i].length(); j++)  // will gather all of the coordinates for a word in this loop
@@ -141,11 +145,6 @@ public class gameService {
 
                     String pos1 = String.valueOf(i);
                     String pos2 = String.valueOf(j);
-                    //System.out.print("[");
-                    //System.out.print(pos1);
-                    //System.out.print("][");
-                    //System.out.print(pos2);
-                    //System.out.print("]");
                     System.out.print(game[i][j]); // for testing in a console window
                     System.out.print(" ");
                 }
