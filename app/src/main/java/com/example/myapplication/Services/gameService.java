@@ -37,7 +37,7 @@ public class gameService {
             int min = 0;
             int max = rows;
             int limiter = 0;
-            int finalCoodinateCounter = -1;
+            int finalCoordinateCounter = -1;
 
             int coordinateX = rand.nextInt((max - min) + 1) + min; // picks a random x
             int coordinateY = rand.nextInt((max - min) + 1) + min; // picks a random y
@@ -45,7 +45,7 @@ public class gameService {
 
             for (int i = 0; i < words.length; i++)
             {
-                if(limiter > 500){
+                if(limiter > 1000){
                     limiter = 0;
                     i++;
                 }
@@ -116,7 +116,7 @@ public class gameService {
                 }
 
                 if(checkCoordinates(game, locations, words[i], length) && locations != null){
-                    finalCoodinateCounter++;
+                    finalCoordinateCounter++;
                     gameWords[i] = words[i];
 
                     if(locations[0] == null){
@@ -130,11 +130,14 @@ public class gameService {
 
 
                     WordTracker tracker = new WordTracker(words[i], locations[0].a, locations[0].b, locations[length-1].a, locations[length-1].b);
-                    finalCoordinates[finalCoodinateCounter] = tracker; //  I THINK I MIGHT HAVE A BUG AROUND HERE - TRYING TO SELECT THE LAST WORD SEEMS TO NOT WORK BECAUSE COORDINATES ARE MESSED UP ON IT
+                    finalCoordinates[finalCoordinateCounter] = tracker;
                     for(int k = 0; k< length; k++){
                         game = placeLetter(locations[k].a, locations[k].b, words[i], k, game);
                     }
                     response.Game = game;
+                    if(finalCoordinates == null){
+                        int test = 0;
+                    }
                     response.WordDetails = finalCoordinates;
                 }else{
                     //if checkCoordinates fails...

@@ -54,7 +54,7 @@ public class QuickGameActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
-        String[] words = new String[]{"wolf", "cougar", "snake", "lion", "tiger", "bear", "turtle", "giraffe", "hippo", "bingo"};
+        String[] words = new String[]{"wolves", "cougars", "snakeys", "lioness", "tigers", "bears", "turtley", "giraffer", "hippopot", "bingod"};
 
         if(b != null){
             words = b.getStringArray("array");
@@ -65,7 +65,6 @@ public class QuickGameActivity extends AppCompatActivity {
 
         ListView listView; // for word list under word search
         final ArrayAdapter wordListAdapter;  // create out adapter to front end
-
 
         GameData gameData = new GameData();        //for capturing the game
         String[][] gameArray = new String[rows][columns];   //for displaying the game
@@ -102,8 +101,6 @@ public class QuickGameActivity extends AppCompatActivity {
             }
         });
 
-        //--------------------------------------------
-        //--------------------------------------------
         grid = (GridView) findViewById(R.id.gameGrid);
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, total);
         grid.setAdapter(adapter);
@@ -132,7 +129,8 @@ public class QuickGameActivity extends AppCompatActivity {
 
 
                 for (int i = 0; i < 10; i++) {
-                    if ((WordData[i].beginX == firstPosX && WordData[i].beginY == firstPosY && WordData[i].endX == secondPosX && WordData[i].endY == secondPosY) || (WordData[i].beginX == firstPosY && WordData[i].beginY == firstPosX && WordData[i].endX == secondPosY && WordData[i].endY == secondPosX)){
+                    if(WordData[i] != null)
+                    if (WordData[i] != null && ((WordData[i].beginX == firstPosX && WordData[i].beginY == firstPosY && WordData[i].endX == secondPosX && WordData[i].endY == secondPosY) || (WordData[i].beginX == firstPosY && WordData[i].beginY == firstPosX && WordData[i].endX == secondPosY && WordData[i].endY == secondPosX))){
                         String selectedWord = WordData[i].word;
 
                         int[] fillerLocations = new int[selectedWord.length()];
@@ -185,17 +183,10 @@ public class QuickGameActivity extends AppCompatActivity {
                                 backPosition = fillerLocations[j];
                             }
                         }
-
                     }
                 }
-
-
-
-
                 Toast.makeText(getApplicationContext(), ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "[ " + String.valueOf(firstPosX) + " ]" + " " +  "[ " + String.valueOf(firstPosY) + " ]"+ "[ "+String.valueOf(secondPosX)+" ]" + " " +  "[ " +String.valueOf(secondPosY)+" ]", Toast.LENGTH_SHORT).show();
-
-
             }
         });
 
