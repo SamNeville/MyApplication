@@ -12,7 +12,10 @@ package com.example.myapplication.Activities;
 public class MainActivity extends AppCompatActivity {
     private Button quickGameButton;
     private Button createGameButton;
-
+    private Button importButton;
+    private Button createAccountButton;
+    private Button signInButton;
+    private Button resumeGameButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     public void initialize(){
         quickGameButton = findViewById(R.id.quickGameButton);
         createGameButton = findViewById(R.id.createGameButton);
+        importButton = findViewById(R.id.importButton);
+        createAccountButton = findViewById(R.id.createAccountButton);
+        signInButton = findViewById(R.id.signInButton);
+        resumeGameButton = findViewById(R.id.resumeGameButton);
         quickGameButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -36,6 +43,30 @@ public class MainActivity extends AppCompatActivity {
                 openCreateGame();
             }
         });
+        importButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                openImport();
+            }
+        });
+        createAccountButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                openCreateAccount();
+            }
+        });
+        signInButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                openSignIn();
+            }
+        });
+        resumeGameButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                openResumeGame();
+            }
+        });
 
     }
 
@@ -46,6 +77,26 @@ public class MainActivity extends AppCompatActivity {
 
     public void openCreateGame(){
         Intent intent = new Intent(this, CreateGameActivity.class);
+        startActivity(intent);
+    }
+
+    public void openImport(){
+        Intent intent = new Intent(this, ImportDataActivity.class);
+        startActivity(intent);
+    }
+
+    public void openCreateAccount(){
+        Intent intent = new Intent(this, CreateAccountActivity.class);
+        startActivity(intent);
+    }
+
+    public void openSignIn(){
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
+    }
+
+    public void openResumeGame(){
+        Intent intent = new Intent(this, ResumeGameActivity.class);
         startActivity(intent);
     }
 
