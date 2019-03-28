@@ -43,4 +43,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(cursor.getCount() >0) return false;
         else return true;
     }
+
+    public Boolean chkSignIn(String password, String username){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("Select * from user where password =?  and username = ?", new String[] {password, username});
+        if(cursor.getCount() >0) return true;
+        else return false;
+    }
 }
