@@ -288,8 +288,8 @@ public class QuickGameActivity extends AppCompatActivity {
                 }
 
             }
+            wordsLeft = wordsLeft +"\n";
 
-            wordsLeft = wordList +"\n";
             for (int i = 0; i <= 9 ; i++) {
 
                 if(wordList[i] != null && wordList[i].word != null){
@@ -307,6 +307,7 @@ public class QuickGameActivity extends AppCompatActivity {
 
                 }
             }
+            currentGame = currentGame + "\n";
 
 
             FileOutputStream fileOutputStream = new FileOutputStream(file);
