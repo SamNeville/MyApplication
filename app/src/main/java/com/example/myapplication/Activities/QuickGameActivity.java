@@ -1,4 +1,7 @@
 package com.example.myapplication.Activities;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.*;
 
 import android.content.Intent;
@@ -11,14 +14,22 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.content.Context;
 import android.widget.Toast;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 
 import com.example.myapplication.DTOs.Coordinates;
 import com.example.myapplication.DTOs.GameData;
+import com.example.myapplication.DTOs.SaveData;
 import com.example.myapplication.DTOs.WordTracker;
 import com.example.myapplication.R;
 import com.example.myapplication.Services.gameService;
@@ -41,6 +52,8 @@ public class QuickGameActivity extends AppCompatActivity {
 
     GridView grid;
     ListView list;
+    Button saveGameButton;
+
 
     String selectedItem = null;
     TextView GridViewItems, BackSelectedItem;
@@ -52,12 +65,19 @@ public class QuickGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quick_game);
 
+        saveGameButton = findViewById(R.id.button3);
+
+
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
+        Bundle a = intent.getExtras();
         String[] words = new String[]{"wolves", "cougars", "snakeys", "lioness", "tigers", "bears", "turtley", "giraffer", "hippopot", "bingod"};
 
         if(b != null){
             words = b.getStringArray("array");
+        }
+        if(a!=null){
+            words = a.getStringArray("saved");
         }
 
         final int columns = 10;
@@ -66,14 +86,23 @@ public class QuickGameActivity extends AppCompatActivity {
         ListView listView; // for word list under word search
         final ArrayAdapter wordListAdapter;  // create out adapter to front end
 
+        //saveGameButton.setOnClickListener();
+
         GameData gameData = new GameData();        //for capturing the game
         String[][] gameArray = new String[rows][columns];   //for displaying the game
         final WordTracker[] WordData;
 
         gameData = gameService.createGame(words, rows, columns); // call to service to get a game
         gameArray = gameData.Game; // grabs the game
+        final String[][] saveGameArray = gameArray;
         final String[] wordList = gameData.Words; // grabs the words
         WordData = gameData.WordDetails; // grabs Words and their start and end coordinates
+
+        saveGameButton.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                gameSaver(saveGameArray, wordList, WordData, getApplicationContext());
+            }
+        });
 
         String[] total = new String [rows*columns]; // used for gridview since it can only take single dimensional arrays
 
@@ -242,5 +271,51 @@ public class QuickGameActivity extends AppCompatActivity {
         return response;
     }
 
+    public void gameSaver(String game[][], String words[], WordTracker[] wordList, Context context) {
+        try{
+            SaveData saveGameData = new SaveData();
+            saveGameData.game = game;
+            saveGameData.allWords = wordList;
+            saveGameData.wordsLeft = words;
+            String wordsLeft = "WordsLeft:";
+            String allWords = "AllWords:";
+            String currentGame = "Game:";
+            File file = new File(getFilesDir(), "SavedGameData.txt");
+
+            for (int i = 0; i <= words[i].length() ; i++) {
+                if(words[i]!=""){
+                    wordsLeft = wordsLeft + words[i]+ ",";
+                }
+
+            }
+            for (int i = 0; i <= 9 ; i++) {
+
+                if(wordList[i] != null && wordList[i].word != null){
+                    allWords = allWords + wordList[i].word + ",";
+                }
+
+            }
+
+            if(currentGame != null){
+                for (int i = 0; i <=game.length-1 ; i++) {
+                    for (int j = 0; j <game.length-1 ; j++) {
+                        currentGame = currentGame + game[i][j] + ",";
+                    }
+
+                }
+            }
+
+
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+            bufferedWriter.write(wordsLeft);
+            bufferedWriter.write(allWords);
+            bufferedWriter.write(currentGame);
+        }catch (IOException ex){
+
+        }
+
+    };
 
 }
