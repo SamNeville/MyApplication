@@ -288,6 +288,8 @@ public class QuickGameActivity extends AppCompatActivity {
                 }
 
             }
+
+            wordsLeft = wordList +"\n";
             for (int i = 0; i <= 9 ; i++) {
 
                 if(wordList[i] != null && wordList[i].word != null){
@@ -295,6 +297,7 @@ public class QuickGameActivity extends AppCompatActivity {
                 }
 
             }
+            allWords = allWords + "\n";
 
             if(currentGame != null){
                 for (int i = 0; i <=game.length-1 ; i++) {
@@ -312,6 +315,7 @@ public class QuickGameActivity extends AppCompatActivity {
             bufferedWriter.write(wordsLeft);
             bufferedWriter.write(allWords);
             bufferedWriter.write(currentGame);
+            bufferedWriter.close();
         }catch (IOException ex){
 
         }
