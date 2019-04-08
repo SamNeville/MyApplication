@@ -283,19 +283,17 @@ public class QuickGameActivity extends AppCompatActivity {
             File file = new File(getFilesDir(), "SavedGameData.txt");
 
             for (int i = 0; i <= words[i].length() ; i++) {
-                if(words[i]!=""){
+                if(words[i]!="" && words[i] != null){
                     wordsLeft = wordsLeft + words[i]+ ",";
                 }
-
             }
             wordsLeft = wordsLeft +"\n";
 
             for (int i = 0; i <= 9 ; i++) {
 
                 if(wordList[i] != null && wordList[i].word != null){
-                    allWords = allWords + wordList[i].word + ",";
+                    allWords = allWords + wordList[i].word + ",{" + wordList[i].beginX + "},{" + wordList[i].beginY + "},{" + wordList[i].endX + "},{" + wordList[i].endY + "},";
                 }
-
             }
             allWords = allWords + "\n";
 
@@ -304,7 +302,6 @@ public class QuickGameActivity extends AppCompatActivity {
                     for (int j = 0; j <game.length-1 ; j++) {
                         currentGame = currentGame + game[i][j] + ",";
                     }
-
                 }
             }
             currentGame = currentGame + "\n";
