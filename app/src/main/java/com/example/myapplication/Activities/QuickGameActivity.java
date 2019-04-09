@@ -71,12 +71,12 @@ public class QuickGameActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle b = intent.getExtras();
         Bundle a = intent.getExtras();
-        String[] words = new String[]{"wolves", "cougars", "snakeys", "lioness", "tigers", "bears", "turtley", "giraffer", "hippopot", "bingod"};
+        String[] words = new String[]{"wolves", "cougars", "snakeys", "lioness", "tigers", "bears", "turtley", "giraffe", "hippopo", "bingod"};
 
         if(b != null){
             words = b.getStringArray("array");
         }
-        if(a!=null){
+        else if(a!=null){
             words = a.getStringArray("saved");
         }
 
@@ -227,13 +227,14 @@ public class QuickGameActivity extends AppCompatActivity {
         int length = -1;
 
         for (int i = 0; i < data.length; i++) {
-            if(data[i] != null){
+            if(data[i] != null && !data[i].word.equals("")){
                 length++;
             }
         }
 
-        for (int i = 0; i < length ; i++) {
-            if(data[i].word != "" && word == data[i].word){
+        for (int i = 0; i <= length ; i++) {
+            String s = data[i].word;
+            if(!data[i].word.equals("") && word.equals(data[i].word)){
                 selectedWord = data[i];
             }
         }
@@ -282,8 +283,8 @@ public class QuickGameActivity extends AppCompatActivity {
             String currentGame = "Game:";
             File file = new File(getFilesDir(), "SavedGameData.txt");
 
-            for (int i = 0; i <= words[i].length() ; i++) {
-                if(words[i]!="" && words[i] != null){
+            for (int i = 0; i <= words.length-1 ; i++) {
+                if(!words[i].equals("") && words[i] != "" && words[i] != null && !words[i].equals(null)){
                     wordsLeft = wordsLeft + words[i]+ ",";
                 }
             }
@@ -299,7 +300,7 @@ public class QuickGameActivity extends AppCompatActivity {
 
             if(currentGame != null){
                 for (int i = 0; i <=game.length-1 ; i++) {
-                    for (int j = 0; j <game.length-1 ; j++) {
+                    for (int j = 0; j <game.length ; j++) {
                         currentGame = currentGame + game[i][j] + ",";
                     }
                 }
