@@ -48,6 +48,7 @@ public class ResumeGameActivity extends AppCompatActivity {
                 saveData.wordsLeft = new String[10];
                 saveData.allWords = new WordTracker[10];
                 saveData.game = new String[10][10];
+                String[] gameBoardArray = new String[100];
                 String delims = "[:{},]+";
                 String[] savedDataString = resumeGameData.split(delims);
                 Boolean wordsLeft = false;
@@ -114,8 +115,21 @@ public class ResumeGameActivity extends AppCompatActivity {
                         counter++;
                     }
                 }
-                int test = 0;
+                int gameBoardXCounter = 0;
+                int gameBoardYCounter = 0;
+
+                for (int i = 0; i <=99 ; i++) {
+                        gameBoardArray[i] = saveData.game[gameBoardXCounter][gameBoardYCounter];
+                        gameBoardXCounter++;
+                         if (gameBoardXCounter == 10) {
+                            gameBoardXCounter = 0;
+                            gameBoardYCounter++;
+                        }
+                }
+
+                int test1 = 0;
             }
+            int test = 0;
         }
         catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());

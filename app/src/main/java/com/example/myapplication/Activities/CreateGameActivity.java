@@ -79,12 +79,12 @@ public class CreateGameActivity extends AppCompatActivity {
                         }
 
                         if (mEdit.getText().toString().length() <=3) {
-                            Toast.makeText(getApplicationContext(), "Words Must Be At Least 3 Characters Long", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Words Must Be At Least 4 Characters Long", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
                         if (mEdit.getText().toString().length() > 10) {
-                            Toast.makeText(getApplicationContext(), "Words Must Be 10 Characters Or Less Long", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Words Must Be 9 Characters Or Less", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
