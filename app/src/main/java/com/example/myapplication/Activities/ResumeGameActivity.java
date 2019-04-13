@@ -1,11 +1,18 @@
 package com.example.myapplication.Activities;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.DTOs.SaveData;
 import com.example.myapplication.DTOs.WordTracker;
@@ -19,20 +26,27 @@ import java.io.InputStreamReader;
 
 public class ResumeGameActivity extends AppCompatActivity {
 
+    GridView grid;
+    ListView list;
+    Button saveGameButton;
+    String selectedItem = null;
+    TextView GridViewItems, BackSelectedItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resume_game);
 
+        saveGameButton = findViewById(R.id.button3);
 
         String resumeGameData = "";
+        final ArrayAdapter wordListAdapter;
 
         try {
             InputStream inputStream = getApplicationContext().openFileInput("SavedGameData.txt");
 
             if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);//receives saved game data
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String receiveString = "";
                 StringBuilder stringBuilder = new StringBuilder();
@@ -47,7 +61,7 @@ public class ResumeGameActivity extends AppCompatActivity {
                 SaveData saveData = new SaveData();
                 saveData.wordsLeft = new String[10];
                 saveData.allWords = new WordTracker[10];
-                saveData.game = new String[10][10];
+                saveData.game = new String[10][10];// creates game data object for easier manipulation
                 String[] gameBoardArray = new String[100];
                 String delims = "[:{},]+";
                 String[] savedDataString = resumeGameData.split(delims);
@@ -57,7 +71,7 @@ public class ResumeGameActivity extends AppCompatActivity {
                 int counter = 0;
                 int internalCounter = 0;
 
-                for (int i = 0; i < savedDataString.length ; i++) {
+                for (int i = 0; i < savedDataString.length ; i++) { //parses txt data into object
                     if(savedDataString[i].equals("WordsLeft"))
                     {
                         wordsLeft = true;
@@ -83,7 +97,12 @@ public class ResumeGameActivity extends AppCompatActivity {
                         internalCounter=0;
                         i++;
                     }
-                    if(wordsLeft) {saveData.wordsLeft[counter] = savedDataString[i]; counter++;}
+                    if(wordsLeft) {
+                        for (int j = 0; j <saveData.wordsLeft.length ; j++) {
+
+                        }
+                        saveData.wordsLeft[counter] = savedDataString[i]; counter++;
+                    }
                     if(allWords){
                         if (internalCounter == 0){
                             WordTracker tracker = new WordTracker(" ", 0,0,0,0);
@@ -127,9 +146,27 @@ public class ResumeGameActivity extends AppCompatActivity {
                         }
                 }
 
-                int test1 = 0;
+                //create resume game grid and others
+                list = (ListView)findViewById(R.id.wordsView); // find the list view from xml
+                wordListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, saveData.wordsLeft); // should display these words under the grid now
+                list.setAdapter(wordListAdapter);
+                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView parent, View v, int position, long id) {
+                        Toast.makeText(getApplicationContext(), ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                grid = (GridView) findViewById(R.id.gameGrid);
+                ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, gameBoardArray);
+                grid.setAdapter(adapter);
+                grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView parent, View v, int position, long id) {
+
+                    }
+                });
+
+
             }
-            int test = 0;
         }
         catch (FileNotFoundException e) {
             Log.e("login activity", "File not found: " + e.toString());
