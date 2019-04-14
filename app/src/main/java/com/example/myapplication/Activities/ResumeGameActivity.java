@@ -19,12 +19,27 @@ import com.example.myapplication.DTOs.WordTracker;
 import com.example.myapplication.R;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
 public class ResumeGameActivity extends AppCompatActivity {
+    int wordRemoveCounter = 2;
+
+    int firstPosX = 0;
+    int firstPosY = 0;
+
+    int secondPosX = 0;
+    int secondPosY = 0;
+
+    int posCountTracker = 0;
+    int highlightTracker = 0;
+    int backPosition = -1;
 
     GridView grid;
     ListView list;
@@ -33,12 +48,12 @@ public class ResumeGameActivity extends AppCompatActivity {
     TextView GridViewItems, BackSelectedItem;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resume_game);
-
         saveGameButton = findViewById(R.id.button3);
-
+        final int columns = 10;
+        final int rows = 10;
         String resumeGameData = "";
         final ArrayAdapter wordListAdapter;
 
@@ -58,7 +73,7 @@ public class ResumeGameActivity extends AppCompatActivity {
                 inputStream.close();
                 resumeGameData = stringBuilder.toString();
 
-                SaveData saveData = new SaveData();
+                final SaveData saveData = new SaveData();
                 saveData.wordsLeft = new String[10];
                 saveData.allWords = new WordTracker[10];
                 saveData.game = new String[10][10];// creates game data object for easier manipulation
@@ -70,6 +85,12 @@ public class ResumeGameActivity extends AppCompatActivity {
                 Boolean game = false;
                 int counter = 0;
                 int internalCounter = 0;
+
+                saveGameButton.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View v) {
+                        gameSaver(saveData.game, saveData.wordsLeft, saveData.allWords, getApplicationContext());
+                    }
+                });
 
                 for (int i = 0; i < savedDataString.length ; i++) { //parses txt data into object
                     if(savedDataString[i].equals("WordsLeft"))
@@ -97,12 +118,7 @@ public class ResumeGameActivity extends AppCompatActivity {
                         internalCounter=0;
                         i++;
                     }
-                    if(wordsLeft) {
-                        for (int j = 0; j <saveData.wordsLeft.length ; j++) {
-
-                        }
-                        saveData.wordsLeft[counter] = savedDataString[i]; counter++;
-                    }
+                    if(wordsLeft) {saveData.wordsLeft[counter] = savedDataString[i]; counter++;}
                     if(allWords){
                         if (internalCounter == 0){
                             WordTracker tracker = new WordTracker(" ", 0,0,0,0);
@@ -134,6 +150,12 @@ public class ResumeGameActivity extends AppCompatActivity {
                         counter++;
                     }
                 }
+
+                for (int i = 0; i <=saveData.wordsLeft.length-1 ; i++) {
+                    if( saveData.wordsLeft[i] == null){
+                        saveData.wordsLeft[i] = ".";
+                    }
+                }
                 int gameBoardXCounter = 0;
                 int gameBoardYCounter = 0;
 
@@ -162,6 +184,87 @@ public class ResumeGameActivity extends AppCompatActivity {
                 grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView parent, View v, int position, long id) {
 
+                        if(posCountTracker == 0){
+                            int x = position%rows;
+                            int y = position/columns;
+                            posCountTracker++;
+                            highlightTracker = 1;
+                            firstPosX = x;
+                            firstPosY = y;
+                            secondPosY = -1;
+                            secondPosX = -1;
+                            int positionA = position;
+                        } else {
+                            int x = position%rows;
+                            int y = position/columns;
+                            posCountTracker--;
+                            highlightTracker = 2;
+                            secondPosX = x;
+                            secondPosY = y;
+                            int positionB = position;
+                        }
+
+
+                        for (int i = 0; i < 10; i++) {
+                            if(saveData.allWords[i] != null)
+                                if (saveData.allWords[i] != null && ((saveData.allWords[i].beginX == firstPosX && saveData.allWords[i].beginY == firstPosY && saveData.allWords[i].endX == secondPosX && saveData.allWords[i].endY == secondPosY) || (saveData.allWords[i].beginX == firstPosY && saveData.allWords[i].beginY == firstPosX && saveData.allWords[i].endX == secondPosY && saveData.allWords[i].endY == secondPosX))){
+                                    String selectedWord = saveData.allWords[i].word;
+
+                                    int[] fillerLocations = new int[selectedWord.length()];
+                                    fillerLocations = gridFiller(selectedWord, saveData.allWords, rows, columns);
+
+                                    int counter = 0;
+                                    for (int j = 0; j < saveData.wordsLeft.length ; j++) {
+                                        if(saveData.wordsLeft[j] != selectedWord) {
+                                            saveData.wordsLeft[counter] = saveData.wordsLeft[j];
+                                        } else counter--;
+                                        counter++;
+                                    }
+
+                                    int temp = (saveData.wordsLeft.length - wordRemoveCounter);
+                                    for (int j = 0; j < saveData.wordsLeft.length ; j++) {
+                                        if(j > temp){
+                                            saveData.wordsLeft[j] = "";
+                                        }
+                                    }
+                                    wordRemoveCounter++;
+
+                                    wordListAdapter.notifyDataSetChanged();
+
+                                    for (int j = 0; j < fillerLocations.length; j++) {
+                                        if(highlightTracker ==1) {
+                                            selectedItem = parent.getItemAtPosition(fillerLocations[j]).toString();
+                                            GridViewItems = (TextView) v;
+                                            GridViewItems.setBackgroundColor(Color.parseColor("#93dada"));
+                                            GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
+                                            BackSelectedItem = (TextView) grid.getChildAt(backPosition);
+                                            if (backPosition != -1) {
+                                                BackSelectedItem.setSelected(false);
+                                                BackSelectedItem.setBackgroundColor(Color.parseColor("#93dada"));
+                                                BackSelectedItem.setTextColor(Color.parseColor("#fdfcfa"));
+                                            }
+                                            backPosition = fillerLocations[j];
+                                        }
+
+                                        if(highlightTracker ==2) {
+                                            selectedItem = parent.getItemAtPosition(fillerLocations[j]).toString();
+                                            GridViewItems = (TextView) v;
+                                            GridViewItems.setBackgroundColor(Color.parseColor("#93dada"));
+                                            GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
+                                            BackSelectedItem = (TextView) grid.getChildAt(backPosition);
+                                            if (backPosition != -1) {
+                                                BackSelectedItem.setSelected(false);
+                                                BackSelectedItem.setBackgroundColor(Color.parseColor("#93dada"));
+                                                BackSelectedItem.setTextColor(Color.parseColor("#fdfcfa"));
+                                            }
+                                            backPosition = fillerLocations[j];
+                                        }
+                                    }
+                                }
+                        }
+                        Toast.makeText(getApplicationContext(), ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "[ " + String.valueOf(firstPosX) + " ]" + " " +  "[ " + String.valueOf(firstPosY) + " ]"+ "[ "+String.valueOf(secondPosX)+" ]" + " " +  "[ " +String.valueOf(secondPosY)+" ]", Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
@@ -177,5 +280,104 @@ public class ResumeGameActivity extends AppCompatActivity {
     }
 
 
+    public int[] gridFiller(String word, WordTracker[] data, int rows, int columns){
+        int [] response = new int[word.length()];
+        WordTracker selectedWord = new WordTracker("",0,0,0,0);
+        int length = -1;
 
+        for (int i = 0; i < data.length; i++) {
+            if(data[i] != null && !data[i].word.equals("")){
+                length++;
+            }
+        }
+
+        for (int i = 0; i <= length ; i++) {
+            String s = data[i].word;
+            if(!data[i].word.equals("") && word.equals(data[i].word)){
+                selectedWord = data[i];
+            }
+        }
+
+        int startY = selectedWord.beginX;
+        int startX = selectedWord.beginY;
+        int endY = selectedWord.endX;
+        int endX = selectedWord.endY;
+        int currentX = startX;
+        int currentY = startY;
+
+        response[0] = currentX + rows*currentY;
+
+        for (int i = 1; i < word.length() ; i++) {
+            if(startX > endX){
+                startX--;
+                currentX = startX;
+            }
+            if(startY > endY){
+                startY--;
+                currentY = startY;
+            }
+            if(startX < endX){
+                startX++;
+                currentX = startX;
+            }
+            if(startY < endY){
+                startY++;
+                currentY = startY;
+            }
+
+            response[i] = currentX + rows*currentY;
+        }
+        response[word.length()-1] = endX + rows*endY;
+        return response;
+    }
+
+
+    public void gameSaver(String game[][], String words[], WordTracker[] wordList, Context context) {
+        try{
+            SaveData saveGameData = new SaveData();
+            saveGameData.game = game;
+            saveGameData.allWords = wordList;
+            saveGameData.wordsLeft = words;
+            String wordsLeft = "WordsLeft:";
+            String allWords = "AllWords:";
+            String currentGame = "Game:";
+            File file = new File(getFilesDir(), "SavedGameData.txt");
+
+            for (int i = 0; i <= words.length-1 ; i++) {
+                if(!words[i].equals("") && words[i] != "" && words[i] != null && !words[i].equals(null)){
+                    wordsLeft = wordsLeft + words[i]+ ",";
+                }
+            }
+            wordsLeft = wordsLeft +"\n";
+
+            for (int i = 0; i <= 9 ; i++) {
+
+                if(wordList[i] != null && wordList[i].word != null){
+                    allWords = allWords + wordList[i].word + ",{" + wordList[i].beginX + "},{" + wordList[i].beginY + "},{" + wordList[i].endX + "},{" + wordList[i].endY + "},";
+                }
+            }
+            allWords = allWords + "\n";
+
+            if(currentGame != null){
+                for (int i = 0; i <=game.length-1 ; i++) {
+                    for (int j = 0; j <game.length ; j++) {
+                        currentGame = currentGame + game[i][j] + ",";
+                    }
+                }
+            }
+            currentGame = currentGame + "\n";
+
+
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
+            bufferedWriter.write(wordsLeft);
+            bufferedWriter.write(allWords);
+            bufferedWriter.write(currentGame);
+            bufferedWriter.close();
+        }catch (IOException ex){
+
+        }
+
+    };
 }
