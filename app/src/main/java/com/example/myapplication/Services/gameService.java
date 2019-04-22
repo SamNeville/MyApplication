@@ -121,11 +121,14 @@ public class gameService {
 
                     if(locations[0] == null){
                         int test = 0;
+                        createGame(words,10,10);
                     }
 
 
                     if(locations[length-1] == null){
                         int test = 0;
+                        createGame(words,10,10);
+
                     }
 
 

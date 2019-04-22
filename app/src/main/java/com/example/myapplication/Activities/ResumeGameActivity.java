@@ -1,6 +1,7 @@
 package com.example.myapplication.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.Random;
 
 public class ResumeGameActivity extends AppCompatActivity {
     int wordRemoveCounter = 2;
@@ -40,10 +43,13 @@ public class ResumeGameActivity extends AppCompatActivity {
     int posCountTracker = 0;
     int highlightTracker = 0;
     int backPosition = -1;
+    int hintCount = 3;
+
 
     GridView grid;
     ListView list;
     Button saveGameButton;
+    Button giveHintButton;
     String selectedItem = null;
     TextView GridViewItems, BackSelectedItem;
 
@@ -52,6 +58,8 @@ public class ResumeGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_resume_game);
         saveGameButton = findViewById(R.id.button3);
+        giveHintButton = findViewById(R.id.button);
+
         final int columns = 10;
         final int rows = 10;
         String resumeGameData = "";
@@ -151,6 +159,8 @@ public class ResumeGameActivity extends AppCompatActivity {
                     }
                 }
 
+
+
                 for (int i = 0; i <=saveData.wordsLeft.length-1 ; i++) {
                     if( saveData.wordsLeft[i] == null){
                         saveData.wordsLeft[i] = ".";
@@ -179,7 +189,7 @@ public class ResumeGameActivity extends AppCompatActivity {
                 });
 
                 grid = (GridView) findViewById(R.id.gameGrid);
-                ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, gameBoardArray);
+                final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, gameBoardArray);
                 grid.setAdapter(adapter);
                 grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView parent, View v, int position, long id) {
@@ -231,6 +241,7 @@ public class ResumeGameActivity extends AppCompatActivity {
 
                                     wordListAdapter.notifyDataSetChanged();
 
+
                                     for (int j = 0; j < fillerLocations.length; j++) {
                                         if(highlightTracker ==1) {
                                             selectedItem = parent.getItemAtPosition(fillerLocations[j]).toString();
@@ -264,9 +275,20 @@ public class ResumeGameActivity extends AppCompatActivity {
                         }
                         Toast.makeText(getApplicationContext(), ((TextView) v).getText(), Toast.LENGTH_SHORT).show();
                         Toast.makeText(getApplicationContext(), "[ " + String.valueOf(firstPosX) + " ]" + " " +  "[ " + String.valueOf(firstPosY) + " ]"+ "[ "+String.valueOf(secondPosX)+" ]" + " " +  "[ " +String.valueOf(secondPosY)+" ]", Toast.LENGTH_SHORT).show();
+                    }
 
+                });
+
+
+                giveHintButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        hintCount = giveHint(saveData.wordsLeft,saveData.allWords,adapter, grid, hintCount);
+
+                        //calls hint method to highlight the grid for a hint. you get 3 hints. updates on screen.
                     }
                 });
+
+                //fillFoundWords(saveData.allWords, saveData.wordsLeft, grid, gameBoardArray);
 
 
             }
@@ -278,6 +300,10 @@ public class ResumeGameActivity extends AppCompatActivity {
         }
 
     }
+
+
+
+
 
 
     public int[] gridFiller(String word, WordTracker[] data, int rows, int columns){
@@ -331,7 +357,6 @@ public class ResumeGameActivity extends AppCompatActivity {
         return response;
     }
 
-
     public void gameSaver(String game[][], String words[], WordTracker[] wordList, Context context) {
         try{
             SaveData saveGameData = new SaveData();
@@ -380,4 +405,105 @@ public class ResumeGameActivity extends AppCompatActivity {
         }
 
     };
+
+    public int giveHint(String[] wordsLeft,WordTracker[] allWords, ArrayAdapter arrayAdapter, GridView grid, int hintCount) {
+        Object parent = grid.getParent();
+
+        if (hintCount != 0) {
+            hintCount--;
+            boolean success = false;
+            String selectedWord = "";
+            int selectedWordY = -1;
+            int selectedWordX = -1;
+
+
+            while (success == false) {
+                Random r = new Random();
+                int rand = r.nextInt((wordsLeft.length - 0) + 0) + 0;
+
+                for (int i = 0; i <= wordsLeft.length - 1; i++) {
+                    if (i == rand && !wordsLeft[i].equals("") && wordsLeft[i] != "") {
+                        selectedWord = wordsLeft[i];
+                        success = true;
+                        break;
+                    }
+                }
+            }
+
+            for (int i = 0; i <= allWords.length - 1; i++) {
+                if (i <= allWords.length - 1 && allWords[i] != null) {
+                    if (allWords[i].word.equals(selectedWord)) {
+                        selectedWordX = allWords[i].beginX;
+                        selectedWordY = allWords[i].beginY;
+                    }
+                }
+            }
+
+            View v = grid.getSelectedView();
+
+            if (selectedWordX != -1 && selectedWordY != -1) {
+                int pos = selectedWordX * 10 + selectedWordY;
+
+                GridViewItems = (TextView) grid.getChildAt(pos);
+                GridViewItems.setBackgroundColor(Color.parseColor("#93dada"));
+                GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
+                hintCount--;
+                EditText hints = (EditText) findViewById(R.id.editText2);
+            } else {
+                hintCount++;
+                Toast.makeText(getApplicationContext(), "Couldn't give hint... hint returned", Toast.LENGTH_SHORT).show();
+                EditText hints = (EditText) findViewById(R.id.editText2);
+            }
+
+        }else Toast.makeText(getApplicationContext(), "Sorry! No more hints", Toast.LENGTH_SHORT).show();
+
+        return hintCount;
+    }
+
+    //public void fillFoundWords(WordTracker[] allWords, String[] wordsLeft, GridView grid, String[] game){
+//
+    //    int foundWordCount = 0;
+    //    grid = (GridView) findViewById(R.id.gameGrid);
+    //    final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, game);
+    //    grid.setAdapter(adapter);
+//
+    //    String[] foundWords = wordsLeft;
+//
+    //    for (int i = 0; i <= allWords.length-1; i++) {
+    //        for (int j = 0; j <= wordsLeft.length-1; j++) {
+    //            if( !allWords[i].word.equals(null) && !allWords[i].word.equals("") && !allWords[i].word.equals(".")){
+    //                if(allWords[i].word == wordsLeft[j]){
+    //                    for (int k = 0; k <=foundWords.length ; k++) {
+    //                        if(foundWords[k] == wordsLeft[i]){
+    //                            foundWords[k] = ""; // compares arrays, if words match, delete it from "foundwords" array
+    //                            //all that will be left here are the words that were already found, and we need to highlight these
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+//
+    //    QuickGameActivity activity = new QuickGameActivity();
+    //    for (int i = 0; i <= allWords.length ; i++) {
+    //        if(!foundWords[i].equals("") && !foundWords[i].equals(null) && !foundWords[i].equals(".")){
+    //            int[]positions = activity.gridFiller(foundWords[i], allWords, 10, 10);
+//
+    //            for (int j = 0; j < positions.length; j++) {
+    //                GridViewItems = (TextView) grid.getChildAt(positions[j]);
+    //                GridViewItems.setBackgroundColor(Color.parseColor("#93dada"));
+    //                GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
+//
+    //            }
+    //        }
+    //    }
+//
+    //}
+
+    public void openVictory(){
+        Intent intent = new Intent(this, victoryActivity.class);
+        startActivity(intent);
+    }
+
+
 }
