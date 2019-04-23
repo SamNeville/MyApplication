@@ -212,7 +212,7 @@ public class ResumeGameActivity extends AppCompatActivity {
                 int smallIndex=0;
                 for (int i = 0; i <= tempWords.length-1 ; i++) {
                     if(!tempWords[i].equals("") && !tempWords[i].equals(" ") && !tempWords[i].equals(".")){
-                        saveData.wordsLeft[smallIndex] = tempWords[i];
+                        saveData.wordsLeft[smallIndex] = tempWords[i]; // re-builds word list to view words left
                         //saveData.wordsLeft[endCount] = "";
                         endCount--;
                         smallIndex++;
@@ -295,7 +295,8 @@ public class ResumeGameActivity extends AppCompatActivity {
                                     //        saveData.wordsLeft[j] = "";
                                     //    }
                                     //}
-int n = 5;
+
+
                                     for (int j = 0; j <= saveData.wordsLeft.length-1 ; j++) {
                                         if(saveData.wordsLeft[j].equals(selectedWord)){
                                             saveData.wordsLeft[j] = "";
@@ -305,17 +306,28 @@ int n = 5;
                                     for (int j = 0; j <saveData.wordsLeft.length-1 ; j++) {
                                         if(j > 0 && saveData.wordsLeft[j-1].equals("")){
                                             saveData.wordsLeft[j-1] = saveData.wordsLeft[j];
-                                            saveData.wordsLeft[j] = "";
+                                            saveData.wordsLeft[j] = ""; // actively updates word list as words are found
                                         }
                                     }
                                     int test = 5;
                                     int[] fillerLocations = new int[selectedWord.length()];
                                     fillerLocations = gridFiller(selectedWord, saveData.allWords, rows, columns);
 
+
+                                    boolean done = true;
+                                    for (int j = 0; j < saveData.wordsLeft.length ; j++) {
+                                        if(!saveData.wordsLeft[j].equals("") && saveData.wordsLeft[j] != "" && !saveData.wordsLeft[j].equals(null) && saveData.wordsLeft[j] != null && !saveData.wordsLeft[j].equals(" ") && saveData.wordsLeft[j] != " "){
+                                                done = false;
+                                                break;
+                                        }
+                                    }
                                     wordRemoveCounter++;
 
                                     wordListAdapter.notifyDataSetChanged();
 
+                                    if(done){
+                                        openVictory();
+                                    } else done=false;
 
                                     for (int j = 0; j < fillerLocations.length; j++) {
                                         if(highlightTracker ==1) {
