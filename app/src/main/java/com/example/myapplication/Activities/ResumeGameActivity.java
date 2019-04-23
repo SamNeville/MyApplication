@@ -31,11 +31,38 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Random;
 
+      //String[] foundWords = new String[10];
+      // int[]positions = new int[10];
+      // int index = 0;
+      // for (int i = 0; i <saveData.allWords.length-1 ; i++) {
+      // if(index > foundWords.length) break;
+      // foundWords[index] = saveData.allWords[i].word;
+      // index++;
+      // for (int j = 0; j <saveData.wordsLeft.length ; j++) {
+      // if(saveData.allWords[i].word.equals(saveData.wordsLeft[j])){
+      // foundWords[index] = null;
+      // index--;
+      // }
+      // }
+      // }
+      // for (int i = 0; i <= foundWords.length-1 ; i++) {
+      // if(foundWords[i] != null) {
+      // positions = gridFiller(foundWords[i], saveData.allWords, 10, 10);
+      // for (int j = 0; j <= positions.length - 1; j++) {
+      // GridViewItems = (TextView) grid.getChildAt(positions[j]);
+      // GridViewItems.setBackgroundColor(Color.parseColor("#93dada"));
+      // GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
+      // }
+      // }
+      // }
+
+
 public class ResumeGameActivity extends AppCompatActivity {
     int wordRemoveCounter = 2;
 
     int firstPosX = 0;
     int firstPosY = 0;
+    int deleteCount = 0;
 
     int secondPosX = 0;
     int secondPosY = 0;
@@ -163,7 +190,7 @@ public class ResumeGameActivity extends AppCompatActivity {
 
                 for (int i = 0; i <=saveData.wordsLeft.length-1 ; i++) {
                     if( saveData.wordsLeft[i] == null){
-                        saveData.wordsLeft[i] = ".";
+                        saveData.wordsLeft[i] = "";
                     }
                 }
                 int gameBoardXCounter = 0;
@@ -180,6 +207,18 @@ public class ResumeGameActivity extends AppCompatActivity {
 
                 //create resume game grid and others
                 list = (ListView)findViewById(R.id.wordsView); // find the list view from xml
+                String[] tempWords = saveData.wordsLeft;
+                int endCount = saveData.wordsLeft.length-1;
+                int smallIndex=0;
+                for (int i = 0; i <= tempWords.length-1 ; i++) {
+                    if(!tempWords[i].equals("") && !tempWords[i].equals(" ") && !tempWords[i].equals(".")){
+                        saveData.wordsLeft[smallIndex] = tempWords[i];
+                        //saveData.wordsLeft[endCount] = "";
+                        endCount--;
+                        smallIndex++;
+                        wordRemoveCounter = smallIndex;
+                    }
+                }
                 wordListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, saveData.wordsLeft); // should display these words under the grid now
                 list.setAdapter(wordListAdapter);
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -191,6 +230,8 @@ public class ResumeGameActivity extends AppCompatActivity {
                 grid = (GridView) findViewById(R.id.gameGrid);
                 final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, gameBoardArray);
                 grid.setAdapter(adapter);
+
+
                 grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView parent, View v, int position, long id) {
 
@@ -220,10 +261,27 @@ public class ResumeGameActivity extends AppCompatActivity {
                                 if (saveData.allWords[i] != null && ((saveData.allWords[i].beginX == firstPosX && saveData.allWords[i].beginY == firstPosY && saveData.allWords[i].endX == secondPosX && saveData.allWords[i].endY == secondPosY) || (saveData.allWords[i].beginX == firstPosY && saveData.allWords[i].beginY == firstPosX && saveData.allWords[i].endX == secondPosY && saveData.allWords[i].endY == secondPosX))){
                                     String selectedWord = saveData.allWords[i].word;
 
-                                    int[] fillerLocations = new int[selectedWord.length()];
-                                    fillerLocations = gridFiller(selectedWord, saveData.allWords, rows, columns);
-
                                     int counter = 0;
+
+                                    for (int j = 0; j <=saveData.wordsLeft.length ; j++) {
+                                        if(saveData.wordsLeft[i].equals(selectedWord)){
+
+                                        }
+                                    }
+
+
+                                    //more problems here
+                                    String[] tempWords = saveData.wordsLeft;
+                                    int endCount = saveData.wordsLeft.length-1;
+                                    int smallIndex=0;
+                                    for (int j = 0; j <= tempWords.length-1 ; j++) {
+                                        if(!tempWords[j].equals("") && !tempWords[j].equals(" ") && !tempWords[j].equals(".") && !tempWords[j].equals(selectedWord)){
+                                            saveData.wordsLeft[smallIndex] = tempWords[j];
+                                            smallIndex++;
+                                            wordRemoveCounter = smallIndex;
+                                        }
+                                    }
+
                                     for (int j = 0; j < saveData.wordsLeft.length ; j++) {
                                         if(saveData.wordsLeft[j] != selectedWord) {
                                             saveData.wordsLeft[counter] = saveData.wordsLeft[j];
@@ -231,12 +289,16 @@ public class ResumeGameActivity extends AppCompatActivity {
                                         counter++;
                                     }
 
-                                    int temp = (saveData.wordsLeft.length - wordRemoveCounter);
+                                    int temp = (saveData.wordsLeft.length - wordRemoveCounter-2);
                                     for (int j = 0; j < saveData.wordsLeft.length ; j++) {
                                         if(j > temp){
                                             saveData.wordsLeft[j] = "";
                                         }
                                     }
+
+                                    int[] fillerLocations = new int[selectedWord.length()];
+                                    fillerLocations = gridFiller(selectedWord, saveData.allWords, rows, columns);
+
                                     wordRemoveCounter++;
 
                                     wordListAdapter.notifyDataSetChanged();
@@ -279,7 +341,6 @@ public class ResumeGameActivity extends AppCompatActivity {
 
                 });
 
-
                 giveHintButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
                         hintCount = giveHint(saveData.wordsLeft,saveData.allWords,adapter, grid, hintCount);
@@ -287,9 +348,6 @@ public class ResumeGameActivity extends AppCompatActivity {
                         //calls hint method to highlight the grid for a hint. you get 3 hints. updates on screen.
                     }
                 });
-
-                //fillFoundWords(saveData.allWords, saveData.wordsLeft, grid, gameBoardArray);
-
 
             }
         }
@@ -459,46 +517,6 @@ public class ResumeGameActivity extends AppCompatActivity {
 
         return hintCount;
     }
-
-    //public void fillFoundWords(WordTracker[] allWords, String[] wordsLeft, GridView grid, String[] game){
-//
-    //    int foundWordCount = 0;
-    //    grid = (GridView) findViewById(R.id.gameGrid);
-    //    final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, game);
-    //    grid.setAdapter(adapter);
-//
-    //    String[] foundWords = wordsLeft;
-//
-    //    for (int i = 0; i <= allWords.length-1; i++) {
-    //        for (int j = 0; j <= wordsLeft.length-1; j++) {
-    //            if( !allWords[i].word.equals(null) && !allWords[i].word.equals("") && !allWords[i].word.equals(".")){
-    //                if(allWords[i].word == wordsLeft[j]){
-    //                    for (int k = 0; k <=foundWords.length ; k++) {
-    //                        if(foundWords[k] == wordsLeft[i]){
-    //                            foundWords[k] = ""; // compares arrays, if words match, delete it from "foundwords" array
-    //                            //all that will be left here are the words that were already found, and we need to highlight these
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-//
-    //    QuickGameActivity activity = new QuickGameActivity();
-    //    for (int i = 0; i <= allWords.length ; i++) {
-    //        if(!foundWords[i].equals("") && !foundWords[i].equals(null) && !foundWords[i].equals(".")){
-    //            int[]positions = activity.gridFiller(foundWords[i], allWords, 10, 10);
-//
-    //            for (int j = 0; j < positions.length; j++) {
-    //                GridViewItems = (TextView) grid.getChildAt(positions[j]);
-    //                GridViewItems.setBackgroundColor(Color.parseColor("#93dada"));
-    //                GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
-//
-    //            }
-    //        }
-    //    }
-//
-    //}
 
     public void openVictory(){
         Intent intent = new Intent(this, victoryActivity.class);

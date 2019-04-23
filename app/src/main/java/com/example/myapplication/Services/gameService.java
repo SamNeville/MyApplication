@@ -125,11 +125,11 @@ public class gameService {
                     }
 
 
-                    if(locations[length-1] == null){
-                        int test = 0;
-                        createGame(words,10,10);
-
-                    }
+                    //if(locations[length-1] == null){
+                    //    int test = 0;
+                    //    createGame(words,10,10);
+//
+                    //}
 
 
                     WordTracker tracker = new WordTracker(words[i], locations[0].a, locations[0].b, locations[length-1].a, locations[length-1].b);

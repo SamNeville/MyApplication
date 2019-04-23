@@ -13,8 +13,6 @@ public class MainActivity extends AppCompatActivity {
     private Button quickGameButton;
     private Button createGameButton;
     private Button importButton;
-    private Button createAccountButton;
-    private Button signInButton;
     private Button resumeGameButton;
 
     @Override
@@ -28,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         quickGameButton = findViewById(R.id.quickGameButton);
         createGameButton = findViewById(R.id.createGameButton);
         importButton = findViewById(R.id.importButton);
-        createAccountButton = findViewById(R.id.createAccountButton);
-        signInButton = findViewById(R.id.signInButton);
         resumeGameButton = findViewById(R.id.resumeGameButton);
         quickGameButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -47,18 +43,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 openImport();
-            }
-        });
-        createAccountButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                openCreateAccount();
-            }
-        });
-        signInButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                openSignIn();
             }
         });
         resumeGameButton.setOnClickListener(new View.OnClickListener(){

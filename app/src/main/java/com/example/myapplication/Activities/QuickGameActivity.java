@@ -299,7 +299,7 @@ public class QuickGameActivity extends AppCompatActivity {
             File file = new File(getFilesDir(), "SavedGameData.txt");
 
             for (int i = 0; i <= words.length-1 ; i++) {
-                if(!words[i].equals("") && words[i] != "" && words[i] != null && !words[i].equals(null)){
+                if(!words[i].equals("") && words[i] != "" && words[i] != null && !words[i].equals(null) && !words[i].equals(" ") && words[i] != " "){
                     wordsLeft = wordsLeft + words[i]+ ",";
                 }
             }
