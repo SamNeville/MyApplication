@@ -270,32 +270,45 @@ public class ResumeGameActivity extends AppCompatActivity {
                                     }
 
 
-                                    //more problems here
-                                    String[] tempWords = saveData.wordsLeft;
-                                    int endCount = saveData.wordsLeft.length-1;
-                                    int smallIndex=0;
-                                    for (int j = 0; j <= tempWords.length-1 ; j++) {
-                                        if(!tempWords[j].equals("") && !tempWords[j].equals(" ") && !tempWords[j].equals(".") && !tempWords[j].equals(selectedWord)){
-                                            saveData.wordsLeft[smallIndex] = tempWords[j];
-                                            smallIndex++;
-                                            wordRemoveCounter = smallIndex;
-                                        }
-                                    }
+                                   // //more problems here
+                                   // String[] tempWords = saveData.wordsLeft;
+                                   // int endCount = saveData.wordsLeft.length-1;
+                                   // int smallIndex=0;
+                                   // for (int j = 0; j <= tempWords.length-1 ; j++) {
+                                   //     if(!tempWords[j].equals("") && !tempWords[j].equals(" ") && !tempWords[j].equals(".") && !tempWords[j].equals(selectedWord)){
+                                   //         saveData.wordsLeft[smallIndex] = tempWords[j];
+                                   //         smallIndex++;
+                                   //         wordRemoveCounter = smallIndex;
+                                   //     }
+                                   // }
 
-                                    for (int j = 0; j < saveData.wordsLeft.length ; j++) {
-                                        if(saveData.wordsLeft[j] != selectedWord) {
-                                            saveData.wordsLeft[counter] = saveData.wordsLeft[j];
-                                        } else counter--;
-                                        counter++;
-                                    }
-
-                                    int temp = (saveData.wordsLeft.length - wordRemoveCounter-2);
-                                    for (int j = 0; j < saveData.wordsLeft.length ; j++) {
-                                        if(j > temp){
+                                    //for (int j = 0; j < saveData.wordsLeft.length ; j++) {
+                                    //    if(saveData.wordsLeft[j] != selectedWord) {
+                                    //        saveData.wordsLeft[counter] = saveData.wordsLeft[j];
+                                    //    } else counter--;
+                                    //    counter++;
+                                    //}
+//
+                                    //int temp = (saveData.wordsLeft.length - wordRemoveCounter-2);
+                                    //for (int j = 0; j < saveData.wordsLeft.length ; j++) {
+                                    //    if(j > temp){
+                                    //        saveData.wordsLeft[j] = "";
+                                    //    }
+                                    //}
+int n = 5;
+                                    for (int j = 0; j <= saveData.wordsLeft.length-1 ; j++) {
+                                        if(saveData.wordsLeft[j].equals(selectedWord)){
                                             saveData.wordsLeft[j] = "";
                                         }
                                     }
-
+                                    int test23 = 5;
+                                    for (int j = 0; j <saveData.wordsLeft.length-1 ; j++) {
+                                        if(j > 0 && saveData.wordsLeft[j-1].equals("")){
+                                            saveData.wordsLeft[j-1] = saveData.wordsLeft[j];
+                                            saveData.wordsLeft[j] = "";
+                                        }
+                                    }
+                                    int test = 5;
                                     int[] fillerLocations = new int[selectedWord.length()];
                                     fillerLocations = gridFiller(selectedWord, saveData.allWords, rows, columns);
 
