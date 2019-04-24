@@ -62,7 +62,7 @@ public class ImportDataActivity extends AppCompatActivity {
                     String[] gameWords = new String[10];
                     String delims = "[,]+";
                     gameWords = text.split(delims);
-                    b.putStringArray("array", words);
+                    b.putStringArray("science", gameWords);
                     intent.putExtras(b);
                     startActivity(intent);
                 } catch (MalformedURLException e) {
@@ -87,7 +87,7 @@ public class ImportDataActivity extends AppCompatActivity {
                     String[] gameWords = new String[10];
                     String delims = "[,]+";
                     gameWords = text.split(delims);
-                    b.putStringArray("array", words);
+                    b.putStringArray("cars", gameWords);
                     intent.putExtras(b);
                     startActivity(intent);
                 } catch (MalformedURLException e) {
@@ -111,7 +111,7 @@ public class ImportDataActivity extends AppCompatActivity {
                 String[] gameWords = new String[10];
                 String delims = "[,]+";
                 gameWords = text.split(delims);
-                b.putStringArray("array", words);
+                b.putStringArray("animals", gameWords);
                 intent.putExtras(b);
                 startActivity(intent);
             } catch (MalformedURLException e) {

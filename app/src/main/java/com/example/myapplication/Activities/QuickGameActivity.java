@@ -73,8 +73,17 @@ public class QuickGameActivity extends AppCompatActivity {
         if(b != null){
             words = b.getStringArray("array");
         }
-        else if(a!=null){
+         if(words == null){
             words = a.getStringArray("saved");
+        }
+         if(words == null){
+            words = b.getStringArray("cars");
+        }
+         if (words == null) {
+            words = b.getStringArray("animals");
+        }
+         if(words == null) {
+            words = b.getStringArray("science");
         }
 
         final int columns = 10;
