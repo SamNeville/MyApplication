@@ -9,11 +9,11 @@ import android.widget.Button;
 import com.example.myapplication.R;
 
 public class victoryActivity extends AppCompatActivity {
-Button homeButton = findViewById(R.id.button4);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_victory);
+        Button homeButton = findViewById(R.id.button4);
 
         homeButton.setOnClickListener(new View.OnClickListener(){
             @Override
