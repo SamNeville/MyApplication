@@ -31,32 +31,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Random;
 
-      //String[] foundWords = new String[10];
-      // int[]positions = new int[10];
-      // int index = 0;
-      // for (int i = 0; i <saveData.allWords.length-1 ; i++) {
-      // if(index > foundWords.length) break;
-      // foundWords[index] = saveData.allWords[i].word;
-      // index++;
-      // for (int j = 0; j <saveData.wordsLeft.length ; j++) {
-      // if(saveData.allWords[i].word.equals(saveData.wordsLeft[j])){
-      // foundWords[index] = null;
-      // index--;
-      // }
-      // }
-      // }
-      // for (int i = 0; i <= foundWords.length-1 ; i++) {
-      // if(foundWords[i] != null) {
-      // positions = gridFiller(foundWords[i], saveData.allWords, 10, 10);
-      // for (int j = 0; j <= positions.length - 1; j++) {
-      // GridViewItems = (TextView) grid.getChildAt(positions[j]);
-      // GridViewItems.setBackgroundColor(Color.parseColor("#93dada"));
-      // GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
-      // }
-      // }
-      // }
-
-
 public class ResumeGameActivity extends AppCompatActivity {
     int wordRemoveCounter = 2;
 
@@ -219,7 +193,7 @@ public class ResumeGameActivity extends AppCompatActivity {
                         wordRemoveCounter = smallIndex;
                     }
                 }
-                wordListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, saveData.wordsLeft); // should display these words under the grid now
+                wordListAdapter = new ArrayAdapter(this, R.layout.boardlayout, saveData.wordsLeft); // should display these words under the grid now
                 list.setAdapter(wordListAdapter);
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView parent, View v, int position, long id) {
@@ -228,12 +202,38 @@ public class ResumeGameActivity extends AppCompatActivity {
                 });
 
                 grid = (GridView) findViewById(R.id.gameGrid);
-                final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, gameBoardArray);
+                final ArrayAdapter adapter = new ArrayAdapter(this, R.layout.boardlayout, gameBoardArray);
                 grid.setAdapter(adapter);
 
 
                 grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView parent, View v, int position, long id) {
+
+
+                        String[] foundWords = new String[10];
+                        int[]positions = new int[10];
+                        int index = 0;
+                        for (int i = 0; i <saveData.allWords.length-1 ; i++) {
+                            if(index > foundWords.length) break;
+                            foundWords[index] = saveData.allWords[i].word;
+                            index++;
+                            for (int j = 0; j <saveData.wordsLeft.length ; j++) {
+                                if(saveData.allWords[i].word.equals(saveData.wordsLeft[j])){
+                                    foundWords[index] = null;
+                                    index--;
+                                }
+                            }
+                        }
+                        for (int i = 0; i <= foundWords.length-1 ; i++) {
+                            if(foundWords[i] != null) {
+                                positions = gridFiller(foundWords[i], saveData.allWords, 10, 10);
+                                for (int j = 0; j <= positions.length - 1; j++) {
+                                    GridViewItems = (TextView) (grid.getChildAt(positions[j]));
+                                    GridViewItems.setBackgroundColor(Color.parseColor("#93dada"));
+                                    GridViewItems.setTextColor(Color.parseColor("#fdfcfa"));
+                                }
+                            }
+                        }
 
                         if(posCountTracker == 0){
                             int x = position%rows;
@@ -365,6 +365,9 @@ public class ResumeGameActivity extends AppCompatActivity {
                     }
 
                 });
+
+                grid.performClick();
+                grid.performClick();
 
                 giveHintButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {

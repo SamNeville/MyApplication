@@ -120,7 +120,7 @@ public class QuickGameActivity extends AppCompatActivity {
         }
         //we start building the game here
         list = (ListView)findViewById(R.id.wordsView); // find the list view from xml
-        wordListAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, wordList); // should display these words under the grid now
+        wordListAdapter = new ArrayAdapter(this, R.layout.boardlayout, wordList); // should display these words under the grid now
         list.setAdapter(wordListAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
@@ -129,7 +129,7 @@ public class QuickGameActivity extends AppCompatActivity {
         }); // allow us to click on words
 
         grid = (GridView) findViewById(R.id.gameGrid);
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, total);
+        final ArrayAdapter adapter = new ArrayAdapter(this, R.layout.boardlayout, total);
         grid.setAdapter(adapter);
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {//here we select letters and test to make words
